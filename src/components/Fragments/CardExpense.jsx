@@ -29,28 +29,6 @@ function CardExpense(props) {
 
     const expenseContent = data && Object.keys(data).length > 0 && (
         <div className="h-full">
-            {/* Header: Icon, Category, Amount, Percentage */}
-            <div className="flex items-start justify-between mb-6">
-                <div className="flex items-center">
-                    <div className="bg-gray-05 text-gray-02 p-3 rounded-lg flex items-center justify-center">
-                        {renderIcon(data.category)}
-                    </div>
-                    <div className="ms-4">
-                        <div className="text-gray-02 text-sm">{data.category}</div>
-                        <div className="font-bold text-xl">${data.amount}</div>
-                    </div>
-                </div>
-                <div className="text-right">
-                    <div className="flex items-center justify-end text-sm">
-                        <span className="text-gray-02 mr-1">{data.percentage || 0}%</span>
-                        <span className={getTrend(data.category).color}>
-                            {getTrend(data.category).icon}
-                        </span>
-                    </div>
-                    <div className="text-[10px] text-gray-03 whitespace-nowrap">Compare to the last month</div>
-                </div>
-            </div>
-
             {/* Transaction Items */}
             <div className="space-y-4">
                 {data.items && data.items.map((item, index) => (
@@ -72,19 +50,44 @@ function CardExpense(props) {
     );
 
     return (
-        <Card
-            title=""
-            desc={
-                !data || Object.keys(data).length === 0 ? (
-                    <div className="flex flex-col justify-center items-center h-[200px] text-primary">
-                        <CircularProgress color="inherit" size={50} enableTrackSlot />
-                        Loading Data
+        <div className="flex flex-col">
+            {/* Header: Icon, Category, Amount, Percentage - Outside Card */}
+            {data && Object.keys(data).length > 0 && (
+                <div className="flex items-start gap-3 mb-2 px-6 py-3">
+                    <div className="bg-gray-05 text-gray-02 p-2 rounded-lg flex items-center justify-center flex-shrink-0">
+                        {renderIcon(data.category)}
                     </div>
-                ) : (
-                    expenseContent
-                )
-            }
-        />
+                    <div>
+                        <div className="text-gray-02 text-xs">{data.category}</div>
+                        <div className="font-bold text-base">${data.amount}</div>
+                    </div>
+                    <div className="text-right ml-auto">
+                        <div className="flex items-center justify-end gap-1 text-xs">
+                            <span className="text-gray-02">{data.percentage || 0}%</span>
+                            <span className={getTrend(data.category).color}>
+                                {getTrend(data.category).icon}
+                            </span>
+                        </div>
+                        <div className="text-[10px] text-gray-03 whitespace-nowrap">Compare to the last month</div>
+                    </div>
+                </div>
+            )}
+            
+            {/* Card with Transaction Items */}
+            <Card
+                title=""
+                desc={
+                    !data || Object.keys(data).length === 0 ? (
+                        <div className="flex flex-col justify-center items-center h-[200px] text-primary">
+                            <CircularProgress color="inherit" size={50} enableTrackSlot />
+                            Loading Data
+                        </div>
+                    ) : (
+                        expenseContent
+                    )
+                }
+            />
+        </div>
     );
 }
 
